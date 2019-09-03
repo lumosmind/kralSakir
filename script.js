@@ -2,8 +2,10 @@ const config = {
   // chose html5-canvas vs CanvasGL. 
   type: Phaser.AUTO,
   //width - height
-  width: 2560,
-  height: 1440,
+  // width: 2560,
+  // height: 1440,
+  width: 1600,
+  height: 900,
   //background color of canvas
   backgroundColor: 0x225566, //hexadecimal color code
 
@@ -32,7 +34,9 @@ const config = {
 
 const game = new Phaser.Game(config);
 let cw, ch;
+let background;
 let sakir, fil, kedi;
+let scene, camera;
 
 function onPreload() {
   ch = game.canvas.height;
@@ -40,7 +44,7 @@ function onPreload() {
   console.log('cw,ch :', cw, ch);
   //--------------------------------
   const baseURL = './assets/images/';
-  this.load.image('background', baseURL + 'arkaplanx.png');
+  this.load.image('background', baseURL + 'background/backgroundPlus.png');
   // this.load.image('background', baseURL + 'background.jpg');
   this.load.image('sakir', baseURL + 'sakir.png');
   this.load.image('fil', baseURL + 'fil.png');
@@ -49,7 +53,14 @@ function onPreload() {
 }
 
 function onCreate() {
-  this.add.image(game.canvas.width / 2, game.canvas.height / 2, 'background');
+  scene = this;
+  camera = this.cameras.main;
+  console.log('camera.width, camera.height :', camera.width, camera.height);
+  console.log('camera.displayHeight, camera.displayWidth :', camera.displayHeight, camera.displayWidth);
+  background = this.add.image(game.canvas.width / 2, game.canvas.height / 2, 'background');
+  const backgroundFactor = ch / background.height;
+  console.log('backgroundFactor :', backgroundFactor);
+  background.setScale(backgroundFactor);
   // sakir = this.add.image(cw * .01, ch - ch * .1, 'sakir').setOrigin();
   // sakir = this.physics.add.image(0, ch / 2, 'sakir').setAlpha(.4);
   fil = this.physics.add.image(cw * .01, ch - ch * 0.25, 'fil')
@@ -74,8 +85,6 @@ function onCreate() {
     .setAlpha(1)
     .setOrigin(0, 1)
     .setImmovable();
-
-
 
 
 }
