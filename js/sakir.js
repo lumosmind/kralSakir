@@ -11,7 +11,7 @@ class Sakir {
     this.fireDelay = 500;
     this.canFire = true;
     this.depth = 10;
-    this.bulletScale = .3;
+    this.bulletScale = .5;
 
     this.positions = [
       { x: cw * .15, y: ch - ch * 0.04 }, //1. kulvar
