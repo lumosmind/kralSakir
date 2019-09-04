@@ -107,4 +107,30 @@ class Fil {
       callback: (() => { this.canFire = true; }),
     });
   }
+
+  brain() {
+    // 1- jump
+    // 2- fire
+    // 3- idl
+
+    const dice = Math.floor(Math.random() * 3 + 1);
+    switch (dice) {
+      case 1:
+        this.randomJump();
+        break;
+      case 2:
+        this.fire();
+        break;
+      case 3:
+        //
+        break;
+    }
+  }
+
+  randomJump() {
+    const dice = Math.floor(Math.random() * 3);
+    if (dice = this.positionNumber) return;
+
+
+  }
 }

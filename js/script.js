@@ -46,7 +46,8 @@ function onPreload() {
   console.log('cw,ch :', cw, ch);
   //--------------------------------
   const baseURL = './assets/images/';
-  this.load.image('background', baseURL + 'background/backgroundPlus.png');
+  //this.load.image('background', baseURL + 'background/backgroundPlus.png');
+  this.load.image('background', baseURL + 'background/artılıback.png');
   // this.load.image('background', baseURL + 'background.jpg');
   /* this.load.image('sakir', baseURL + 'sakir.png');
   this.load.image('fil', baseURL + 'fil.png');
