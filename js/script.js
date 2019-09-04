@@ -60,6 +60,9 @@ function onPreload() {
   viruses = new Viruses(this);
   viruses.preload();
 
+  fil = new Fil(this);
+  fil.preload();
+
 }
 
 function onCreate() {
@@ -103,6 +106,7 @@ function onCreate() {
 
   sakir.create();
   viruses.create();
+  fil.create();
 
   this.physics.add.collider(sakir.bullets, viruses.viruses, bulletVirusCoolisionHandler);
 
@@ -121,5 +125,6 @@ function bulletVirusCoolisionHandler(bullet, virus) {
 function onUpdate() {
   sakir.update();
   viruses.update();
+  fil.update();
 
 }

@@ -30,7 +30,7 @@ class Viruses {
       const virus = this.viruses.create(this.positions[0].x - 200, this.positions[0].y, 'virus')
         .setOrigin(0, 1)
 
-      this.scaleFactor = this.ch / virus.height / 4;
+      this.scaleFactor = this.ch / virus.height / 6;
       virus.setScale(this.scaleFactor);
       virus.disableBody(true, true);
       this.pasiveVirusList.push(virus);
