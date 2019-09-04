@@ -5,7 +5,7 @@ class Sakir {
     this.scene = scene;
     this.cw = scene.game.canvas.width;
     this.ch = scene.game.canvas.height;
-    this.bulletSpeed = 150;
+    this.bulletSpeed = 300;
     /*     this.gunX = 50;
         this.gunY = -50; */
     this.fireDelay = 500;
