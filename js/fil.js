@@ -10,16 +10,25 @@ class Fil {
         this.gunY = -50; */
     this.fireDelay = 500;
     this.canFire = true;
-    this.depth = 10;
-    this.bulletScale = .5;
+
+    this.bulletScale = ch / 797 * .5; //.5;
+    this.jumpDelay = 100;
+    this.brainDelay = 5000;
+    this.firePossibility = .75;
+    this.jumpPossibility = .2;
+    this.idlPossibility = .05;
 
     this.positions = [
-      { x: cw * .05, y: ch - ch * 0.04 }, //1. kulvar
-      { x: cw * .05, y: ch - ch * 0.16 }, //2. kulvar
-      { x: cw * .05, y: ch - ch * 0.28 }, //3. kulvar
+      { x: cw * -.03, y: ch - ch * 0.04, charDepth: 102, bulletDepth: 101 }, //1. kulvar
+      { x: cw * -.03, y: ch - ch * 0.16, charDepth: 12, bulletDepth: 11 }, //2. kulvar
+      { x: cw * -.03, y: ch - ch * 0.28, charDepth: 2, bulletDepth: 1 }, //3. kulvar
     ];
 
-    this.positionNumber = 0;
+
+
+
+
+    this.positionNumber = 2;
 
 
   }
@@ -32,11 +41,14 @@ class Fil {
 
   create() {
     // this.character = this.scene.physics.add.image(cw * .15, ch - ch * 0.04, 'sakir')
-    this.character = this.scene.physics.add.image(this.positions[0].x, this.positions[0].y, 'fil')
+    this.character = this.scene.physics.add.image(
+      this.positions[this.positionNumber].x,
+      this.positions[this.positionNumber].y, 'fil')
       .setAlpha(1)
       .setOrigin(0, 1)
       .setImmovable();
-    this.character.depth = this.depth;
+    this.character.depth = this.positions[this.positionNumber].charDepth;
+    this.character.depth = this.positions[this.positionNumber].charDepth;
     this.scaleFactor = this.ch / this.character.height / 4;
     this.character.setScale(this.scaleFactor);
 
@@ -45,11 +57,12 @@ class Fil {
 
     this.bullets = this.scene.physics.add.group();
 
-    this.keyboard = this.scene.input.keyboard.createCursorKeys();
+    // this.keyboard = this.scene.input.keyboard.createCursorKeys();
+    this.startBrain();
   }
 
   update() {
-    if (this.keyboard.up.isDown) {
+    /* if (this.keyboard.up.isDown) {
       this.isUpPressed = true;
     } else if (this.keyboard.down.isDown) {
       this.isDownPressed = true;
@@ -70,7 +83,7 @@ class Fil {
     if (this.keyboard.space.isDown) {
       //fire event
       this.fire();
-    }
+    } */
 
   }
 
@@ -79,6 +92,8 @@ class Fil {
       this.positionNumber += 1;
       this.character.setPosition(this.positions[this.positionNumber].x,
         this.positions[this.positionNumber].y);
+
+      this.character.depth = this.positions[this.positionNumber].charDepth;
 
     }
 
@@ -90,6 +105,8 @@ class Fil {
       this.character.setPosition(this.positions[this.positionNumber].x,
         this.positions[this.positionNumber].y);
 
+      this.character.depth = this.positions[this.positionNumber].charDepth;
+
     }
 
   }
@@ -100,7 +117,7 @@ class Fil {
     this.bullets.create(this.character.x + this.gunX, this.character.y + this.gunY, 'bullet')
       .setScale(this.bulletScale)
       .setVelocity(this.bulletSpeed, 0)
-      .depth = 4;
+      .depth = this.positions[this.positionNumber].bulletDepth;
     this.canFire = false;
     this.scene.time.addEvent({
       delay: this.fireDelay,
@@ -113,23 +130,67 @@ class Fil {
     // 2- fire
     // 3- idl
 
-    const dice = Math.floor(Math.random() * 3 + 1);
-    switch (dice) {
-      case 1:
-        this.randomJump();
-        break;
-      case 2:
-        this.fire();
-        break;
-      case 3:
-        //
-        break;
+    const dice = Math.random();
+    console.log(`move dice ${dice}`);
+    if (0 < dice && dice < this.firePossibility) {
+      console.log('fil chose ... fire');
+      this.fire();
+
+    } else if (this.firePossibility < dice && dice < (this.firePossibility + this.jumpPossibility)) {
+      console.log('fil chose ... jump');
+      this.randomJump();
+    } else {
+      console.log('fil chose ... nothing');
     }
+
+  }
+
+  startBrain() {
+    this.scene.time.addEvent({
+      delay: this.brainDelay,
+      callback: (() => {
+        this.brain();
+        console.log("run fil brain...");
+      }),
+      repeat: -1,
+    });
   }
 
   randomJump() {
-    const dice = Math.floor(Math.random() * 3);
-    if (dice = this.positionNumber) return;
+    const dice = Math.floor(Math.random() * 2);
+    // debugger;
+    const possibleJumps = {
+      0: [1, 2], // sıfırıncı kulvarda atlayabileceği yerler
+      1: [0, 2], // birinci kulvarda atlayabileceği yerler
+      2: [0, 1], // ikinci kulvarda atlayabileceği yerler
+    };
+
+    const jumpPoint = possibleJumps[this.positionNumber][dice];
+
+
+
+    /*     if (dice === this.positionNumber) {
+          console.log('fil chose jump same where...');
+          return;
+        } */
+    const difference = jumpPoint - this.positionNumber;
+    if (difference < 0) {
+      console.log(`fil chose jump ${-difference} step down`);
+      for (let i = 0; i < -difference; i++) {
+        this.scene.time.addEvent({
+          delay: this.jumpDelay * (i + 1),
+          callback: (() => { this.jumpDown(); }),
+        });
+      }
+    } else {
+      for (let i = 0; i < difference; i++) {
+        console.log(`fil chose jump ${difference} step up`);
+        this.scene.time.addEvent({
+          delay: this.jumpDelay * (i + 1),
+          callback: (() => { this.jumpUp(); }),
+        });
+      }
+    }
 
 
   }

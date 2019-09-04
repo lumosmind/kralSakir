@@ -10,14 +10,18 @@ class Sakir {
         this.gunY = -50; */
     this.fireDelay = 500;
     this.canFire = true;
-    this.depth = 10;
-    this.bulletScale = .5;
+
+    this.bulletScale = ch / 797 * .5; //.5; //// *****   Düzenlenecek  *******
 
     this.positions = [
-      { x: cw * .15, y: ch - ch * 0.04 }, //1. kulvar
-      { x: cw * .15, y: ch - ch * 0.16 }, //2. kulvar
-      { x: cw * .15, y: ch - ch * 0.28 }, //3. kulvar
+      { x: cw * .15, y: ch - ch * 0.04, charDepth: 106, bulletDepth: 105 }, //1. kulvar
+      { x: cw * .15, y: ch - ch * 0.16, charDepth: 16, bulletDepth: 15 }, //2. kulvar
+      { x: cw * .15, y: ch - ch * 0.28, charDepth: 6, bulletDepth: 5 }, //3. kulvar
     ];
+
+
+
+
 
     this.positionNumber = 0;
 
@@ -32,11 +36,13 @@ class Sakir {
 
   create() {
     // this.character = this.scene.physics.add.image(cw * .15, ch - ch * 0.04, 'sakir')
-    this.character = this.scene.physics.add.image(this.positions[0].x, this.positions[0].y, 'sakir')
+    this.character = this.scene.physics.add.image(
+      this.positions[this.positionNumber].x,
+      this.positions[this.positionNumber].y, 'sakir')
       .setAlpha(1)
       .setOrigin(0, 1)
       .setImmovable();
-    this.character.depth = this.depth;
+    this.character.depth = this.positions[this.positionNumber].charDepth;
     this.scaleFactor = this.ch / this.character.height / 4;
     this.character.setScale(this.scaleFactor);
 
@@ -80,6 +86,7 @@ class Sakir {
       this.character.setPosition(this.positions[this.positionNumber].x,
         this.positions[this.positionNumber].y);
 
+      this.character.depth = this.positions[this.positionNumber].charDepth;
     }
 
   }
@@ -90,6 +97,7 @@ class Sakir {
       this.character.setPosition(this.positions[this.positionNumber].x,
         this.positions[this.positionNumber].y);
 
+      this.character.depth = this.positions[this.positionNumber].charDepth;
     }
 
   }
@@ -100,7 +108,7 @@ class Sakir {
     this.bullets.create(this.character.x + this.gunX, this.character.y + this.gunY, 'bullet')
       .setScale(this.bulletScale)
       .setVelocity(this.bulletSpeed, 0)
-      .depth = 4;
+      .depth = this.positions[this.positionNumber].bulletDepth;
     this.canFire = false;
     this.scene.time.addEvent({
       delay: this.fireDelay,

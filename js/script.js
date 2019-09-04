@@ -53,8 +53,6 @@ function onPreload() {
   this.load.image('fil', baseURL + 'fil.png');
   this.load.image('kedi', baseURL + 'kedi.png'); */
 
-  this.load.image('platform', baseURL + 'platform.png');
-
   sakir = new Sakir(this);
   sakir.preload();
 
@@ -63,6 +61,9 @@ function onPreload() {
 
   fil = new Fil(this);
   fil.preload();
+
+  kedi = new Kedi(this);
+  kedi.preload();
 
 }
 
@@ -108,6 +109,8 @@ function onCreate() {
   sakir.create();
   viruses.create();
   fil.create();
+  kedi.create();
+
 
   this.physics.add.collider(sakir.bullets, viruses.viruses, bulletVirusCoolisionHandler);
 
@@ -127,5 +130,6 @@ function onUpdate() {
   sakir.update();
   viruses.update();
   fil.update();
+  kedi.update();
 
 }
