@@ -7,7 +7,7 @@ class Viruses {
     this.activeVirusList = [];
     this.pasiveVirusList = [];
     this.totalVirusCount = 5;
-    this.speed = -150;
+    this.speed = -cw * .1;//-150;
 
     this.positions = [
       { x: cw, y: ch - ch * 0.04 }, //1. kulvar
