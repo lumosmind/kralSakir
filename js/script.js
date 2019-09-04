@@ -38,6 +38,7 @@ let background;
 let sakir, fil, kedi;
 let scene, camera;
 
+
 function onPreload() {
   ch = game.canvas.height;
   cw = game.canvas.width;
@@ -46,50 +47,61 @@ function onPreload() {
   const baseURL = './assets/images/';
   this.load.image('background', baseURL + 'background/backgroundPlus.png');
   // this.load.image('background', baseURL + 'background.jpg');
-  this.load.image('sakir', baseURL + 'sakir.png');
+  /* this.load.image('sakir', baseURL + 'sakir.png');
   this.load.image('fil', baseURL + 'fil.png');
-  this.load.image('kedi', baseURL + 'kedi.png');
+  this.load.image('kedi', baseURL + 'kedi.png'); */
+
+  this.load.image('platform', baseURL + 'platform.png');
+
+  sakir = new Sakir(this);
+  sakir.preload();
 
 }
 
 function onCreate() {
   scene = this;
-  camera = this.cameras.main;
-  console.log('camera.width, camera.height :', camera.width, camera.height);
-  console.log('camera.displayHeight, camera.displayWidth :', camera.displayHeight, camera.displayWidth);
+  /*  camera = this.cameras.main;
+   console.log('camera.width, camera.height :', camera.width, camera.height);
+   console.log('camera.displayHeight, camera.displayWidth :', camera.displayHeight, camera.displayWidth); */
   background = this.add.image(game.canvas.width / 2, game.canvas.height / 2, 'background');
   const backgroundFactor = ch / background.height;
   console.log('backgroundFactor :', backgroundFactor);
   background.setScale(backgroundFactor);
   // sakir = this.add.image(cw * .01, ch - ch * .1, 'sakir').setOrigin();
   // sakir = this.physics.add.image(0, ch / 2, 'sakir').setAlpha(.4);
-  fil = this.physics.add.image(cw * .01, ch - ch * 0.25, 'fil')
+  /* fil = this.physics.add.image(cw * .01, ch - ch * 0.25, 'fil')
     .setScale(1)
 
     .setAlpha(1)
     .setOrigin(0, 1)
-    .setImmovable();
+    .setImmovable(); */
 
-  const scaleFactor = ch / fil.height / 4;
-  console.log('scaleFactor :', scaleFactor);
-  fil.setScale(scaleFactor);
+  /*  const scaleFactor = ch / fil.height / 4;
+   console.log('scaleFactor :', scaleFactor);
+   fil.setScale(scaleFactor); */
 
-  sakir = this.physics.add.image(cw * .15, ch - ch * 0.04, 'sakir')
+  /* sakir = this.physics.add.image(cw * .15, ch - ch * 0.04, 'sakir')
     .setScale(scaleFactor)
     .setAlpha(1)
     .setOrigin(0, 1)
-    .setImmovable();
+    .setImmovable(); */
 
-  kedi = this.physics.add.image(cw * .01, ch - ch * 0.03, 'kedi')
-    .setScale(scaleFactor)
-    .setAlpha(1)
-    .setOrigin(0, 1)
-    .setImmovable();
 
+
+  /* kedi = this.physics.add.image(cw * .01, ch - ch * 0.03, 'kedi')
+  .setScale(scaleFactor)
+  .setAlpha(1)
+  .setOrigin(0, 1)
+  .setImmovable(); */
+
+
+
+
+  sakir.create();
 
 }
 
 function onUpdate() {
-
+  sakir.update();
 
 }
