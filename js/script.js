@@ -37,6 +37,7 @@ let cw, ch;
 let background;
 let sakir, fil, kedi;
 let scene, camera;
+let virus;
 
 
 function onPreload() {
@@ -55,6 +56,9 @@ function onPreload() {
 
   sakir = new Sakir(this);
   sakir.preload();
+
+  viruses = new Viruses(this);
+  viruses.preload();
 
 }
 
@@ -98,10 +102,24 @@ function onCreate() {
 
 
   sakir.create();
+  viruses.create();
+
+  this.physics.add.collider(sakir.bullets, viruses.viruses, bulletVirusCoolisionHandler);
+
+
+
+}
+
+function bulletVirusCoolisionHandler(bullet, virus) {
+  console.log('bullet, virus :', bullet, virus);
+  // virus.setTint(0xff0000);
+  bullet.disableBody(true, true);
+  viruses.makeDisable(virus);
 
 }
 
 function onUpdate() {
   sakir.update();
+  viruses.update();
 
 }
