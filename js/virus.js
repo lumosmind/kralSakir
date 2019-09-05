@@ -23,11 +23,20 @@ class Viruses {
   preload() {
     const baseURL = './assets/images/virus/';
     this.scene.load.image('virus', baseURL + 'virus.png');
+    this.scene.load.spritesheet('walk', baseURL + 'virussheet_240x250.png',
+      { frameWidth: 240, frameHeight: 250 });
 
   }
 
   create() {
     this.viruses = this.scene.physics.add.group();
+
+    this.scene.anims.create({
+      key: 'walk',
+      frames: this.scene.anims.generateFrameNumbers('walk', { start: 0, end: 6 }),
+      frameRate: 10,
+      repeat: -1,
+    });
 
 
     for (let i = 0; i < this.totalVirusCount; i++) {
@@ -36,6 +45,7 @@ class Viruses {
 
       this.scaleFactor = this.ch / virus.height * this.characterScaleConstant;
       virus.setScale(this.scaleFactor);
+      // virus.refreshBody();
 
       virus.disableBody(true, true);
       this.pasiveVirusList.push(virus);
@@ -76,6 +86,7 @@ class Viruses {
       true);
     chosenVirus.setVelocity(this.speed, 0);
     chosenVirus.depth = this.positions[positionNumber].charDepth;
+    chosenVirus.anims.play('walk', true);
     this.activeVirusList.push(chosenVirus);
   }
 
