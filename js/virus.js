@@ -30,6 +30,7 @@ class Viruses {
 
   create() {
     this.viruses = this.scene.physics.add.group();
+    // this.viruses = this.scene.physics.add.staticGroup();
 
     this.scene.anims.create({
       key: 'walk',
@@ -40,12 +41,13 @@ class Viruses {
 
 
     for (let i = 0; i < this.totalVirusCount; i++) {
-      const virus = this.viruses.create(this.positions[0].x - 200, this.positions[0].y, 'virus')
+      const virus = this.viruses.create(this.positions[0].x - 200, this.positions[0].y, 'walk', 0)
         .setOrigin(0, 1)
 
       this.scaleFactor = this.ch / virus.height * this.characterScaleConstant;
       virus.setScale(this.scaleFactor);
       // virus.refreshBody();
+
 
       virus.disableBody(true, true);
       this.pasiveVirusList.push(virus);
@@ -87,6 +89,10 @@ class Viruses {
     chosenVirus.setVelocity(this.speed, 0);
     chosenVirus.depth = this.positions[positionNumber].charDepth;
     chosenVirus.anims.play('walk', true);
+    // chosenVirus.refreshBody();
+    chosenVirus.body.updateBounds()
+    // chosenVirus.setBounds(chosenVirus.displayWidth, chosenVirus.displayHeight);
+    // debugger;
     this.activeVirusList.push(chosenVirus);
   }
 
