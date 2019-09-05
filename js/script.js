@@ -43,6 +43,7 @@ let virus;
 let startBtn;
 let stopBtn;
 let backgroundFactor;
+let fpsText;
 
 
 function onPreload() {
@@ -71,6 +72,8 @@ function onPreload() {
 
 function onCreate() {
   scene = this;
+  fpsText = this.add.text(0, 0, 'sdvsd', { fontSize: '80px' });
+  fpsText.depth = 100;
   background = this.add.image(game.canvas.width / 2, game.canvas.height / 2, 'background');
   backgroundFactor = ch / background.height;
   console.warn('first bg height:' + background.height);
@@ -128,6 +131,7 @@ function onUpdate() {
   fil.update();
   kedi.update();
 
+  fpsText.setText(Math.round(game.loop.actualFps));
 }
 
 
