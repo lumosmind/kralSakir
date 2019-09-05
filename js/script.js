@@ -94,7 +94,7 @@ function onCreate() {
 
 
 
-  const button = this.add.image(800 - 16, 16, 'fullscreen', 0).setOrigin(1, 0).setInteractive();
+  const button = this.add.image(cw, 0, 'fullscreen', 0).setOrigin(1, 0).setInteractive();
 
   button.on('pointerup', function () {
 
