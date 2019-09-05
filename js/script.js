@@ -113,6 +113,8 @@ function onCreate() {
 
 
   this.physics.add.collider(sakir.bullets, viruses.viruses, bulletVirusCoolisionHandler);
+  this.physics.add.collider(fil.bullets, viruses.viruses, bulletVirusCoolisionHandler);
+  this.physics.add.collider(kedi.bullets, viruses.viruses, bulletVirusCoolisionHandler);
 
 
 

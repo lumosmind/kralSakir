@@ -12,7 +12,7 @@ class Fil {
     this.canFire = true;
 
     this.bulletScale = ch / 797 * .5; //.5;
-    this.jumpDelay = 100;
+    this.jumpDelay = 2500;
     this.brainDelay = 5000;
     this.firePossibility = .75;
     this.jumpPossibility = .2;

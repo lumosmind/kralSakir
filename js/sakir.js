@@ -11,6 +11,9 @@ class Sakir {
     this.fireDelay = 500;
     this.canFire = true;
 
+    this.isUpPressed = false;
+    this.isDownPressed = false;
+
     this.bulletScale = ch / 797 * .5; //.5; //// *****   Düzenlenecek  *******
 
     this.positions = [
@@ -55,22 +58,25 @@ class Sakir {
   }
 
   update() {
-    if (this.keyboard.up.isDown) {
+    if (this.keyboard.up.isDown && !this.isUpPressed) {
       this.isUpPressed = true;
-    } else if (this.keyboard.down.isDown) {
-      this.isDownPressed = true;
-    }
-
-    if (this.keyboard.up.isUp && this.isUpPressed) {
-      // key up action for up key
-      this.isUpPressed = false;
       this.jumpUp();
       console.log("up");
-    } else if (this.keyboard.down.isUp && this.isDownPressed) {
-      // key up action for down key
-      this.isDownPressed = false;
+    } else if (this.keyboard.down.isDown && !this.isDownPressed) {
+      this.isDownPressed = true;
       this.jumpDown();
       console.log('down');
+    }
+
+    if (this.keyboard.up.isUp) {
+      // key up action for up key
+      this.isUpPressed = false;
+
+    }
+    if (this.keyboard.down.isUp) {
+      // key up action for down key
+      this.isDownPressed = false;
+
     }
 
     if (this.keyboard.space.isDown) {

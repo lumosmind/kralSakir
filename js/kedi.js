@@ -12,10 +12,10 @@ class Kedi {
     this.canFire = true;
 
     this.bulletScale = ch / 797 * .5; //.5;
-    this.jumpDelay = 100;
-    this.brainDelay = 5000;
-    this.firePossibility = .75;
-    this.jumpPossibility = .2;
+    this.jumpDelay = 1500;
+    this.brainDelay = 3500;
+    this.firePossibility = .6;
+    this.jumpPossibility = .35;
     this.idlPossibility = .05;
 
     this.positions = [

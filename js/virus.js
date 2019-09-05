@@ -10,9 +10,9 @@ class Viruses {
     this.speed = -cw * .1;//-150;
 
     this.positions = [
-      { x: cw, y: ch - ch * 0.04 }, //1. kulvar
-      { x: cw, y: ch - ch * 0.16 }, //2. kulvar
-      { x: cw, y: ch - ch * 0.28 }, //3. kulvar
+      { x: cw, y: ch - ch * 0.04, charDepth: 0 }, //1. kulvar
+      { x: cw, y: ch - ch * 0.16, charDepth: 0 }, //2. kulvar
+      { x: cw, y: ch - ch * 0.28, charDepth: 0 }, //3. kulvar
     ];
   }
 
@@ -32,6 +32,7 @@ class Viruses {
 
       this.scaleFactor = this.ch / virus.height / 6;
       virus.setScale(this.scaleFactor);
+
       virus.disableBody(true, true);
       this.pasiveVirusList.push(virus);
     }
@@ -70,6 +71,7 @@ class Viruses {
       true,
       true);
     chosenVirus.setVelocity(this.speed, 0);
+    chosenVirus.depth = this.positions[positionNumber].charDepth;
     this.activeVirusList.push(chosenVirus);
   }
 
