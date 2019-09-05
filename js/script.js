@@ -39,7 +39,7 @@ let cw, ch;
 let background;
 let sakir, fil, kedi;
 let scene, camera;
-let virus;
+let viruses;
 let startBtn;
 let stopBtn;
 let backgroundFactor;
@@ -161,6 +161,7 @@ game.scale.on('resize', function (gameSize, baseSize, displaySize, resolution, p
     if (sakir) sakir.refreshSizes();
     if (kedi) kedi.refreshSizes();
     if (fil) fil.refreshSizes();
+    if (viruses) viruses.refreshSizes();
     ch = game.canvas.height;
     //console.warn('ch..>:' + ch);
     //console.warn('bgFac:' + backgroundFactor);

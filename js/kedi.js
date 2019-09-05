@@ -15,7 +15,7 @@ class Kedi {
     this.fireDelay = 500;
     this.canFire = true;
 
-    this.bulletScale = ch / 797 * .5; //.5;
+    // this.bulletScale = ch / 797 * .5; //.5;
     this.jumpDelay = 2500;
     this.brainDelay = 5000;
     this.firePossibility = .6;
