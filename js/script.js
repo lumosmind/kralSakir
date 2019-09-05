@@ -8,6 +8,7 @@ const config = {
   height: 900,
   //background color of canvas
   backgroundColor: 0x225566, //hexadecimal color code
+  parent: 'container',
 
   scale: {
     autoCenter: Phaser.Scale.CENTER_BOTH, // rescale with aspect ratio
@@ -20,6 +21,7 @@ const config = {
     preload: onPreload,     // load assetes before start the game
     create: onCreate,       // create game object before start game
     update: onUpdate,       // update game object in game
+    resize: onResize,         //cancas resize event
   },
   // physics engine
   physics: {
@@ -38,6 +40,9 @@ let background;
 let sakir, fil, kedi;
 let scene, camera;
 let virus;
+let startBtn;
+let stopBtn;
+let backgroundFactor;
 
 
 function onPreload() {
@@ -46,12 +51,9 @@ function onPreload() {
   console.log('cw,ch :', cw, ch);
   //--------------------------------
   const baseURL = './assets/images/';
-  //this.load.image('background', baseURL + 'background/backgroundPlus.png');
   this.load.image('background', baseURL + 'background/artılıback.png');
-  // this.load.image('background', baseURL + 'background.jpg');
-  /* this.load.image('sakir', baseURL + 'sakir.png');
-  this.load.image('fil', baseURL + 'fil.png');
-  this.load.image('kedi', baseURL + 'kedi.png'); */
+  this.load.spritesheet('fullscreen', baseURL + 'ui/fullscreen.png', { frameWidth: 64, frameHeight: 64 });
+
 
   sakir = new Sakir(this);
   sakir.preload();
@@ -69,39 +71,13 @@ function onPreload() {
 
 function onCreate() {
   scene = this;
-  /*  camera = this.cameras.main;
-   console.log('camera.width, camera.height :', camera.width, camera.height);
-   console.log('camera.displayHeight, camera.displayWidth :', camera.displayHeight, camera.displayWidth); */
   background = this.add.image(game.canvas.width / 2, game.canvas.height / 2, 'background');
-  const backgroundFactor = ch / background.height;
+  backgroundFactor = ch / background.height;
+  console.warn('first bg height:' + background.height);
+  console.error('first bg height:' + background.height);
   console.log('backgroundFactor :', backgroundFactor);
   background.setScale(backgroundFactor);
-  // sakir = this.add.image(cw * .01, ch - ch * .1, 'sakir').setOrigin();
-  // sakir = this.physics.add.image(0, ch / 2, 'sakir').setAlpha(.4);
-  /* fil = this.physics.add.image(cw * .01, ch - ch * 0.25, 'fil')
-    .setScale(1)
 
-    .setAlpha(1)
-    .setOrigin(0, 1)
-    .setImmovable(); */
-
-  /*  const scaleFactor = ch / fil.height / 4;
-   console.log('scaleFactor :', scaleFactor);
-   fil.setScale(scaleFactor); */
-
-  /* sakir = this.physics.add.image(cw * .15, ch - ch * 0.04, 'sakir')
-    .setScale(scaleFactor)
-    .setAlpha(1)
-    .setOrigin(0, 1)
-    .setImmovable(); */
-
-
-
-  /* kedi = this.physics.add.image(cw * .01, ch - ch * 0.03, 'kedi')
-  .setScale(scaleFactor)
-  .setAlpha(1)
-  .setOrigin(0, 1)
-  .setImmovable(); */
 
 
 
@@ -116,6 +92,24 @@ function onCreate() {
   this.physics.add.collider(fil.bullets, viruses.viruses, bulletVirusCoolisionHandler);
   this.physics.add.collider(kedi.bullets, viruses.viruses, bulletVirusCoolisionHandler);
 
+
+
+  const button = this.add.image(800 - 16, 16, 'fullscreen', 0).setOrigin(1, 0).setInteractive();
+
+  button.on('pointerup', function () {
+
+    if (this.scale.isFullscreen) {
+      button.setFrame(0);
+
+      this.scale.stopFullscreen();
+    }
+    else {
+      button.setFrame(1);
+
+      this.scale.startFullscreen();
+    }
+
+  }, this);
 
 
 }
@@ -135,3 +129,53 @@ function onUpdate() {
   kedi.update();
 
 }
+
+
+function openFullscreen() {
+  console.log("fullscreen");
+  const elem = document.getElementsByTagName('canvas')[0];
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.mozRequestFullScreen) { /* Firefox */
+    elem.mozRequestFullScreen();
+  } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE/Edge */
+    elem.msRequestFullscreen();
+  }
+}
+
+function onResize() {
+
+}
+
+
+game.scale.on('resize', function (gameSize, baseSize, displaySize, resolution, previousWidth, previousHeight) {
+  try {
+    console.warn('resized****************************************');
+    console.warn('ch:' + ch);
+    ch = game.canvas.height;
+    console.warn('ch..>:' + ch);
+    console.warn('bgFac:' + backgroundFactor);
+    backgroundFactor = ch / background.height;
+    console.warn('bgFac..>:' + backgroundFactor);
+    console.log('backgroundFactor :', backgroundFactor);
+    background.setScale(backgroundFactor);
+    console.warn('bg heigth after scale:' + background.height);
+
+    background.setPosition(game.canvas.width / 2, game.canvas.height / 2);
+    //*************************************** */
+    //reset all responsive values here
+    //character width ,height
+    //speeds
+    //etc..
+    //*************************************** */
+  } catch (error) {
+    console.error("some errors :D");
+  }
+
+});
+
+
+
+
