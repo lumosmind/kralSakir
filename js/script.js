@@ -76,9 +76,9 @@ function onCreate() {
   fpsText.depth = 100;
   background = this.add.image(game.canvas.width / 2, game.canvas.height / 2, 'background');
   backgroundFactor = ch / background.height;
-  console.warn('first bg height:' + background.height);
-  console.error('first bg height:' + background.height);
-  console.log('backgroundFactor :', backgroundFactor);
+  //console.warn('first bg height:' + background.height);
+  //console.error('first bg height:' + background.height);
+  //console.log('backgroundFactor :', backgroundFactor);
   background.setScale(backgroundFactor);
 
 
@@ -118,7 +118,7 @@ function onCreate() {
 }
 
 function bulletVirusCoolisionHandler(bullet, virus) {
-  console.log('bullet, virus :', bullet, virus);
+  // console.log('bullet, virus :', bullet, virus);
   // virus.setTint(0xff0000);
   bullet.disableBody(true, true);
   viruses.makeDisable(virus);
@@ -156,26 +156,33 @@ function onResize() {
 
 game.scale.on('resize', function (gameSize, baseSize, displaySize, resolution, previousWidth, previousHeight) {
   try {
-    console.warn('resized****************************************');
-    console.warn('ch:' + ch);
+    //console.warn('resized****************************************');
+    //console.warn('ch:' + ch);
+    if (sakir) sakir.refreshSizes();
+    if (kedi) kedi.refreshSizes();
+    if (fil) fil.refreshSizes();
     ch = game.canvas.height;
-    console.warn('ch..>:' + ch);
-    console.warn('bgFac:' + backgroundFactor);
-    backgroundFactor = ch / background.height;
-    console.warn('bgFac..>:' + backgroundFactor);
-    console.log('backgroundFactor :', backgroundFactor);
-    background.setScale(backgroundFactor);
-    console.warn('bg heigth after scale:' + background.height);
+    //console.warn('ch..>:' + ch);
+    //console.warn('bgFac:' + backgroundFactor);
+    if (background) {
+      backgroundFactor = ch / background.height;
+      background.setScale(backgroundFactor);
+      background.setPosition(game.canvas.width / 2, game.canvas.height / 2);
+    }
+    //console.warn('bgFac..>:' + backgroundFactor);
+    //console.log('backgroundFactor :', backgroundFactor);
+    //console.warn('bg heigth after scale:' + background.height);
 
-    background.setPosition(game.canvas.width / 2, game.canvas.height / 2);
     //*************************************** */
     //reset all responsive values here
     //character width ,height
     //speeds
     //etc..
+
     //*************************************** */
   } catch (error) {
     console.error("some errors :D");
+    console.error(error);
   }
 
 });

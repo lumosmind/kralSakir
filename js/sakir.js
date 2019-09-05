@@ -3,9 +3,13 @@ class Sakir {
   constructor(scene) {
     // debugger;
     this.scene = scene;
-    this.cw = scene.game.canvas.width;
-    this.ch = scene.game.canvas.height;
-    this.bulletSpeed = cw * .4;//600;
+    this.characterScaleConstant = .25;
+    this.bulletSpeedConstant = .4;
+    this.bulletScaleConstant = .5;
+    this.refreshSizes();
+    // this.cw = scene.game.canvas.width;
+    // this.ch = scene.game.canvas.height;
+    // this.bulletSpeed = cw * .4;//600;
     /*     this.gunX = 50;
         this.gunY = -50; */
     this.fireDelay = 500;
@@ -14,13 +18,13 @@ class Sakir {
     this.isUpPressed = false;
     this.isDownPressed = false;
 
-    this.bulletScale = ch / 797 * .5; //.5; //// *****   Düzenlenecek  *******
+    // this.bulletScale = ch / 797 * .5; //.5; //// *****   Düzenlenecek  *******
 
-    this.positions = [
-      { x: cw * .15, y: ch - ch * 0.04, charDepth: 106, bulletDepth: 105 }, //1. kulvar
-      { x: cw * .15, y: ch - ch * 0.16, charDepth: 16, bulletDepth: 15 }, //2. kulvar
-      { x: cw * .15, y: ch - ch * 0.28, charDepth: 6, bulletDepth: 5 }, //3. kulvar
-    ];
+    /*  this.positions = [
+       { x: cw * .15, y: ch - ch * 0.04, charDepth: 106, bulletDepth: 105 }, //1. kulvar
+       { x: cw * .15, y: ch - ch * 0.16, charDepth: 16, bulletDepth: 15 }, //2. kulvar
+       { x: cw * .15, y: ch - ch * 0.28, charDepth: 6, bulletDepth: 5 }, //3. kulvar
+     ]; */
 
 
 
@@ -61,11 +65,11 @@ class Sakir {
     if (this.keyboard.up.isDown && !this.isUpPressed) {
       this.isUpPressed = true;
       this.jumpUp();
-      console.log("up");
+      // console.log("up");
     } else if (this.keyboard.down.isDown && !this.isDownPressed) {
       this.isDownPressed = true;
       this.jumpDown();
-      console.log('down');
+      // console.log('down');
     }
 
     if (this.keyboard.up.isUp) {
@@ -120,5 +124,30 @@ class Sakir {
       delay: this.fireDelay,
       callback: (() => { this.canFire = true; }),
     });
+  }
+
+  refreshSizes() {
+    // refresh screen sizes variables
+    this.cw = this.scene.game.canvas.width;
+    this.ch = this.scene.game.canvas.height;
+    // refresh bullet speed and scale
+    this.bulletSpeed = cw * this.bulletSpeedConstant;
+    this.bulletScale = ch / 797 * this.bulletScaleConstant;
+
+    //refresh character positions
+    this.positions = [
+      { x: this.cw * .15, y: this.ch - this.ch * 0.04, charDepth: 106, bulletDepth: 105 }, //1. kulvar
+      { x: this.cw * .15, y: this.ch - this.ch * 0.16, charDepth: 16, bulletDepth: 15 }, //2. kulvar
+      { x: this.cw * .15, y: this.ch - this.ch * 0.28, charDepth: 6, bulletDepth: 5 }, //3. kulvar
+    ];
+    if (this.character) {
+      this.scaleFactor = this.ch / this.character.height * this.characterScaleConstant;
+      this.character.setScale(this.scaleFactor);
+
+      this.character.setPosition(this.positions[this.positionNumber].x,
+        this.positions[this.positionNumber].y);
+    }
+
+
   }
 }

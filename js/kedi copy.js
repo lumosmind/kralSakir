@@ -3,30 +3,26 @@ class Kedi {
   constructor(scene) {
     // debugger;
     this.scene = scene;
-    this.characterScaleConstant = .25;
-    this.bulletSpeedConstant = .4;
-    this.bulletScaleConstant = .5;
-    this.refreshSizes();
-    // this.cw = scene.game.canvas.width;
-    // this.ch = scene.game.canvas.height;
-    // this.bulletSpeed = cw * .4;//600;
+    this.cw = scene.game.canvas.width;
+    this.ch = scene.game.canvas.height;
+    this.bulletSpeed = cw * .4;//600;
     /*     this.gunX = 50;
         this.gunY = -50; */
     this.fireDelay = 500;
     this.canFire = true;
 
     this.bulletScale = ch / 797 * .5; //.5;
-    this.jumpDelay = 2500;
-    this.brainDelay = 5000;
+    this.jumpDelay = 1500;
+    this.brainDelay = 3500;
     this.firePossibility = .6;
     this.jumpPossibility = .35;
     this.idlPossibility = .05;
 
-    /*  this.positions = [
-       { x: cw * -.03, y: ch - ch * 0.04, charDepth: 102, bulletDepth: 101 }, //1. kulvar
-       { x: cw * -.03, y: ch - ch * 0.16, charDepth: 12, bulletDepth: 11 }, //2. kulvar
-       { x: cw * -.03, y: ch - ch * 0.28, charDepth: 2, bulletDepth: 1 }, //3. kulvar
-     ]; */
+    this.positions = [
+      { x: cw * .09, y: ch - ch * 0.04, charDepth: 104, bulletDepth: 103 }, //1. kulvar
+      { x: cw * .09, y: ch - ch * 0.16, charDepth: 14, bulletDepth: 13 }, //2. kulvar
+      { x: cw * .09, y: ch - ch * 0.28, charDepth: 4, bulletDepth: 3 }, //3. kulvar
+    ];
 
 
 
@@ -53,7 +49,7 @@ class Kedi {
       .setImmovable();
     this.character.depth = this.positions[this.positionNumber].charDepth;
     this.character.depth = this.positions[this.positionNumber].charDepth;
-    this.scaleFactor = this.ch / this.character.height * this.characterScaleConstant;
+    this.scaleFactor = this.ch / this.character.height / 4;
     this.character.setScale(this.scaleFactor);
 
     this.gunY = -this.character.displayHeight / 2.8;
@@ -194,32 +190,6 @@ class Kedi {
           callback: (() => { this.jumpUp(); }),
         });
       }
-    }
-
-
-  }
-
-
-  refreshSizes() {
-    // refresh screen sizes variables
-    this.cw = this.scene.game.canvas.width;
-    this.ch = this.scene.game.canvas.height;
-    // refresh bullet speed and scale
-    this.bulletSpeed = cw * this.bulletSpeedConstant;
-    this.bulletScale = ch / 797 * this.bulletScaleConstant;
-
-    //refresh character positions
-    this.positions = [
-      { x: this.cw * .09, y: this.ch - this.ch * 0.04, charDepth: 104, bulletDepth: 103 }, //1. kulvar
-      { x: this.cw * .09, y: this.ch - this.ch * 0.16, charDepth: 14, bulletDepth: 13 }, //2. kulvar
-      { x: this.cw * .09, y: this.ch - this.ch * 0.28, charDepth: 4, bulletDepth: 3 }, //3. kulvar
-    ];
-    if (this.character) {
-      this.scaleFactor = this.ch / this.character.height * this.characterScaleConstant;
-      this.character.setScale(this.scaleFactor);
-
-      this.character.setPosition(this.positions[this.positionNumber].x,
-        this.positions[this.positionNumber].y);
     }
 
 

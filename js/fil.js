@@ -3,9 +3,13 @@ class Fil {
   constructor(scene) {
     // debugger;
     this.scene = scene;
-    this.cw = scene.game.canvas.width;
-    this.ch = scene.game.canvas.height;
-    this.bulletSpeed = cw * .4;//600;
+    this.characterScaleConstant = .25;
+    this.bulletSpeedConstant = .4;
+    this.bulletScaleConstant = .5;
+    this.refreshSizes();
+    // this.cw = scene.game.canvas.width;
+    // this.ch = scene.game.canvas.height;
+    // this.bulletSpeed = cw * .4;//600;
     /*     this.gunX = 50;
         this.gunY = -50; */
     this.fireDelay = 500;
@@ -18,11 +22,11 @@ class Fil {
     this.jumpPossibility = .2;
     this.idlPossibility = .05;
 
-    this.positions = [
-      { x: cw * -.03, y: ch - ch * 0.04, charDepth: 102, bulletDepth: 101 }, //1. kulvar
-      { x: cw * -.03, y: ch - ch * 0.16, charDepth: 12, bulletDepth: 11 }, //2. kulvar
-      { x: cw * -.03, y: ch - ch * 0.28, charDepth: 2, bulletDepth: 1 }, //3. kulvar
-    ];
+    /*  this.positions = [
+       { x: cw * -.03, y: ch - ch * 0.04, charDepth: 102, bulletDepth: 101   }, //1. kulvar
+       { x: cw * -.03, y: ch - ch * 0.16, charDepth: 12, bulletDepth: 11    }, //2. kulvar
+       { x: cw * -.03, y: ch - ch * 0.28, charDepth: 2, bulletDepth: 1     }, //3. kulvar
+     ]; */
 
 
 
@@ -49,7 +53,7 @@ class Fil {
       .setImmovable();
     this.character.depth = this.positions[this.positionNumber].charDepth;
     this.character.depth = this.positions[this.positionNumber].charDepth;
-    this.scaleFactor = this.ch / this.character.height / 4;
+    this.scaleFactor = this.ch / this.character.height * this.characterScaleConstant;
     this.character.setScale(this.scaleFactor);
 
     this.gunY = -this.character.displayHeight / 2.8;
@@ -131,16 +135,16 @@ class Fil {
     // 3- idl
 
     const dice = Math.random();
-    console.log(`move dice ${dice}`);
+    // console.log(`move dice ${dice}`);
     if (0 < dice && dice < this.firePossibility) {
-      console.log('fil chose ... fire');
+      // console.log('fil chose ... fire');
       this.fire();
 
     } else if (this.firePossibility < dice && dice < (this.firePossibility + this.jumpPossibility)) {
-      console.log('fil chose ... jump');
+      // console.log('fil chose ... jump');
       this.randomJump();
     } else {
-      console.log('fil chose ... nothing');
+      // console.log('fil chose ... nothing');
     }
 
   }
@@ -150,7 +154,7 @@ class Fil {
       delay: this.brainDelay,
       callback: (() => {
         this.brain();
-        console.log("run fil brain...");
+        // console.log("run fil brain...");
       }),
       repeat: -1,
     });
@@ -175,7 +179,7 @@ class Fil {
         } */
     const difference = jumpPoint - this.positionNumber;
     if (difference < 0) {
-      console.log(`fil chose jump ${-difference} step down`);
+      // console.log(`fil chose jump ${-difference} step down`);
       for (let i = 0; i < -difference; i++) {
         this.scene.time.addEvent({
           delay: this.jumpDelay * (i + 1),
@@ -184,12 +188,38 @@ class Fil {
       }
     } else {
       for (let i = 0; i < difference; i++) {
-        console.log(`fil chose jump ${difference} step up`);
+        // console.log(`fil chose jump ${difference} step up`);
         this.scene.time.addEvent({
           delay: this.jumpDelay * (i + 1),
           callback: (() => { this.jumpUp(); }),
         });
       }
+    }
+
+
+  }
+
+
+  refreshSizes() {
+    // refresh screen sizes variables
+    this.cw = this.scene.game.canvas.width;
+    this.ch = this.scene.game.canvas.height;
+    // refresh bullet speed and scale
+    this.bulletSpeed = cw * this.bulletSpeedConstant;
+    this.bulletScale = ch / 797 * this.bulletScaleConstant;
+
+    //refresh character positions
+    this.positions = [
+      { x: this.cw * -.03, y: this.ch - this.ch * 0.04, charDepth: 102, bulletDepth: 101 }, //1. kulvar
+      { x: this.cw * -.03, y: this.ch - this.ch * 0.16, charDepth: 12, bulletDepth: 11 }, //2. kulvar
+      { x: this.cw * -.03, y: this.ch - this.ch * 0.28, charDepth: 2, bulletDepth: 1 }, //3. kulvar
+    ];
+    if (this.character) {
+      this.scaleFactor = this.ch / this.character.height * this.characterScaleConstant;
+      this.character.setScale(this.scaleFactor);
+
+      this.character.setPosition(this.positions[this.positionNumber].x,
+        this.positions[this.positionNumber].y);
     }
 
 
