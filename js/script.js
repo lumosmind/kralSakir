@@ -236,7 +236,7 @@ function resizeButtons() {
   btnUp.setPosition(0, (ch - btnDown.displayHeight * (1 + paddingFactorBetweenUpDown)));
 
   btnFire.setScale(btnFireFactor);
-  btnFire.setPosition(cw, ch);
+  btnFire.setPosition(game.canvas.width, game.canvas.height);
 }
 
 
