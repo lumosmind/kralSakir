@@ -84,6 +84,7 @@ function onPreload() {
 }
 
 function onCreate() {
+  scene.input.addPointer(4);
   scene = this;
   fpsText = this.add.text(0, 0, 'sdvsd', { fontSize: '80px' });
   fpsText.depth = 100;
