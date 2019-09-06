@@ -61,12 +61,12 @@ class Sakir {
     this.keyboard = this.scene.input.keyboard.createCursorKeys();
   }
 
-  update() {
-    if (this.keyboard.up.isDown && !this.isUpPressed) {
+  update(jumpDirection, isFiring) {
+    if ((this.keyboard.up.isDown && !this.isUpPressed) || jumpDirection === 1) {
       this.isUpPressed = true;
       this.jumpUp();
       // console.log("up");
-    } else if (this.keyboard.down.isDown && !this.isDownPressed) {
+    } else if ((this.keyboard.down.isDown && !this.isDownPressed) || jumpDirection === -1) {
       this.isDownPressed = true;
       this.jumpDown();
       // console.log('down');
@@ -83,10 +83,12 @@ class Sakir {
 
     }
 
-    if (this.keyboard.space.isDown) {
+    if (this.keyboard.space.isDown || isFiring) {
       //fire event
       this.fire();
     }
+
+
 
   }
 

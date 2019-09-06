@@ -45,6 +45,15 @@ let stopBtn;
 let backgroundFactor;
 let fpsText;
 
+let btnUp, btnDown, btnFire;
+let isUpUp = true;
+let isDownUp = true;
+let isFireUp = true;
+
+// 1: up 0: stay -1:down
+let sakirJumDirection = 0;
+let isFiring = false;
+
 
 function onPreload() {
   ch = game.canvas.height;
@@ -55,6 +64,10 @@ function onPreload() {
   this.load.image('background', baseURL + 'background/artılıback.png');
   this.load.spritesheet('fullscreen', baseURL + 'ui/fullscreen.png', { frameWidth: 64, frameHeight: 64 });
 
+  //buttons
+  this.load.image('btnUp', baseURL + 'buttons/up.png');
+  this.load.image('btnDown', baseURL + 'buttons/down.png');
+  this.load.image('btnFire', baseURL + 'buttons/fire.png');
 
   sakir = new Sakir(this);
   sakir.preload();
@@ -115,6 +128,8 @@ function onCreate() {
   }, this);
 
 
+  addButtons();
+
 }
 
 function bulletVirusCoolisionHandler(bullet, virus) {
@@ -126,7 +141,10 @@ function bulletVirusCoolisionHandler(bullet, virus) {
 }
 
 function onUpdate() {
-  sakir.update();
+  sakir.update(sakirJumDirection, isFiring);
+  sakirJumDirection = 0;
+  isFiring = false;
+
   viruses.update();
   fil.update();
   kedi.update();
@@ -187,6 +205,79 @@ game.scale.on('resize', function (gameSize, baseSize, displaySize, resolution, p
   }
 
 });
+
+
+function addButtons() {
+  btnDown = scene.add.sprite(0, ch, 'btnDown').setOrigin(0, 1);
+  btnDown.depth = 200;
+  btnDown.alpha = .3;
+  btnUp = scene.add.sprite(0, ch - btnDown.height, 'btnUp').setOrigin(0, 1);
+  btnUp.depth = 200;
+  btnUp.alpha = .3;
+  btnFire = scene.add.sprite(cw, ch, 'btnFire').setOrigin(1, 1);
+  btnFire.depth = 200;
+  btnFire.alpha = .3;
+
+  resizeButtons();
+  setButtonsActions();
+}
+
+function resizeButtons() {
+  const btnDownFactor = ch / 797 * .7;
+  const btnUpFactor = ch / 797 * .7;
+  const paddingFactorBetweenUpDown = 0.11;
+  const btnFireFactor = ch / 797 * .7;
+  btnDown.setScale(btnDownFactor);
+  btnUp.setScale(btnUpFactor);
+  btnUp.setPosition(0, (ch - btnDown.displayHeight * (1 + paddingFactorBetweenUpDown)));
+  btnFire.setScale(btnFireFactor);
+}
+
+
+
+function setButtonsActions() {
+  //up
+  btnUp.setInteractive().on('pointerdown', function (pointer, localX, localY, event) {
+    console.log(event);
+    if (isUpUp) {
+      // sakir.jumpUp();
+      sakirJumDirection = 1;
+    }
+  });
+
+  btnUp.setInteractive().on('pointerup', function (pointer, localX, localY, event) {
+    isUpUp = true;
+  });
+
+
+  //down
+
+  btnDown.setInteractive().on('pointerdown', function (pointer, localX, localY, event) {
+    console.log(event);
+    if (isDownUp) {
+      // sakir.jumpUp();
+      sakirJumDirection = -1;
+    }
+  });
+
+  btnDown.setInteractive().on('pointerup', function (pointer, localX, localY, event) {
+    isDownUp = true;
+  });
+
+  //fire
+  btnFire.setInteractive().on('pointerdown', function (pointer, localX, localY, event) {
+    console.log(event);
+    if (isFireUp) {
+      // sakir.jumpUp();
+      isFiring = true;
+    }
+  });
+
+  btnDown.setInteractive().on('pointerup', function (pointer, localX, localY, event) {
+    isFireUp = true;
+    isFiring = false;
+  });
+}
 
 
 
