@@ -188,6 +188,8 @@ game.scale.on('resize', function (gameSize, baseSize, displaySize, resolution, p
       background.setScale(backgroundFactor);
       background.setPosition(game.canvas.width / 2, game.canvas.height / 2);
     }
+
+    if (btnUp) resizeButtons();
     //console.warn('bgFac..>:' + backgroundFactor);
     //console.log('backgroundFactor :', backgroundFactor);
     //console.warn('bg heigth after scale:' + background.height);
@@ -228,9 +230,13 @@ function resizeButtons() {
   const paddingFactorBetweenUpDown = 0.11;
   const btnFireFactor = ch / 797 * .7;
   btnDown.setScale(btnDownFactor);
+  btnDown.setPosition(0, ch);
+
   btnUp.setScale(btnUpFactor);
   btnUp.setPosition(0, (ch - btnDown.displayHeight * (1 + paddingFactorBetweenUpDown)));
+
   btnFire.setScale(btnFireFactor);
+  btnFire.setPosition(cw, ch);
 }
 
 
