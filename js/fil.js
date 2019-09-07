@@ -14,6 +14,7 @@ class Fil {
         this.gunY = -50; */
     this.fireDelay = 500;
     this.canFire = true;
+    this.isBrainStopped = false;
 
     this.bulletScale = ch / 797 * .5; //.5;
     this.jumpDelay = 2500;
@@ -130,6 +131,7 @@ class Fil {
   }
 
   brain() {
+    if (this.isBrainStopped) return;
     // 1- jump
     // 2- fire
     // 3- idl
@@ -150,6 +152,8 @@ class Fil {
   }
 
   startBrain() {
+    this.isBrainStopped = false;
+
     this.scene.time.addEvent({
       delay: this.brainDelay,
       callback: (() => {
@@ -158,6 +162,10 @@ class Fil {
       }),
       repeat: -1,
     });
+  }
+
+  stopBrain() {
+    this.isBrainStopped = true;
   }
 
   randomJump() {

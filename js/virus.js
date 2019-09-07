@@ -26,6 +26,9 @@ class Viruses {
     this.scene.load.spritesheet('walk', baseURL + 'virussheet_240x250.png',
       { frameWidth: 240, frameHeight: 250 });
 
+    this.scene.load.spritesheet('virusDead', baseURL + 'virusDead.png',
+      { frameWidth: 243, frameHeight: 250 });
+
   }
 
   create() {
@@ -38,6 +41,23 @@ class Viruses {
       frameRate: 10,
       repeat: -1,
     });
+
+    this.virusDeadAnim = this.scene.anims.create({
+      key: 'virusDeadAnim',
+      frames: this.scene.anims.generateFrameNumbers('virusDead', { start: 0, end: 8 }),
+      frameRate: 10,
+      repeat: 0,
+    });
+
+    this.virusDeadAnim.on('complete', ((currentAnim, currentFrame, sprite) => {
+      console.log('virus dead anim end');
+      console.log("-----");
+      /* sprite.disableBody(true, true);
+      this.pasiveVirusList.push(sprite);
+      const index = this.activeVirusList.indexOf(sprite);
+      this.activeVirusList.splice(0, 1); */
+      this.disableProcedure(sprite);
+    }));
 
 
     for (let i = 0; i < this.totalVirusCount; i++) {
@@ -97,9 +117,13 @@ class Viruses {
   }
 
   makeDisable(virus) {
-    virus.disableBody(true, true);
-    this.pasiveVirusList.push(virus);
-    const index = this.activeVirusList.indexOf(virus);
+    virus.anims.play('virusDeadAnim', true);
+  }
+
+  disableProcedure(sprite) {
+    sprite.disableBody(true, true);
+    this.pasiveVirusList.push(sprite);
+    const index = this.activeVirusList.indexOf(sprite);
     this.activeVirusList.splice(0, 1);
   }
 
