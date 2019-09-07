@@ -38,10 +38,14 @@ class Sakir {
   preload() {
     const baseURL = './assets/images/sakir/';
     this.scene.load.image('sakir', baseURL + 'sakir.png');
+
     this.scene.load.spritesheet('sakirJump', baseURL + 'jump.png',
       { frameWidth: 177, frameHeight: 250 });
-    this.scene.load.spritesheet('sakirFire' + baseURL + 'fire.png',
+
+    this.scene.load.spritesheet('sakirFire', baseURL + 'fire.png',
       { frameWidth: 178, frameHeight: 250 });
+
+
     this.scene.load.image('bullet', './assets/images/bullets/blueBullet.png');
   }
 
@@ -58,10 +62,18 @@ class Sakir {
     this.character.setScale(this.scaleFactor);
 
     this.scene.anims.create({
+      key: 'sakirIDL',
+      frames: this.scene.anims.generateFrameNumbers('sakirJump',
+        { start: 0, end: 0 }),
+      frameRate: 10,
+      repeat: 0,
+    });
+
+    this.scene.anims.create({
       key: 'sakirJumpUpAnim',
       frames: this.scene.anims.generateFrameNumbers('sakirJump',
         { start: 0, end: 4 }),
-      frameRate: 10,
+      frameRate: 20,
       repeat: 0,
     });
 
@@ -69,17 +81,20 @@ class Sakir {
       key: 'sakirJumpDownAnim',
       frames: this.scene.anims.generateFrameNumbers('sakirJump',
         { start: 5, end: 9 }),
-      frameRate: 10,
+      frameRate: 20,
       repeat: 0,
     });
 
-    this.scene.anims.create({
+    this.fireAnim = this.scene.anims.create({
       key: 'sakirFireAnim',
       frames: this.scene.anims.generateFrameNumbers('sakirFire',
         { start: 0, end: 7 }),
-      frameRate: 10,
+      frameRate: 20,
       repeat: 0,
-    })
+      hideOnComplete: false,
+    });
+
+    this.fireAnim.on('complete', (() => { this.character.anims.play('sakirIDL', true) }));
 
     this.gunY = -this.character.displayHeight / 2.8;
     this.gunX = this.character.displayWidth / 1.5;
@@ -134,7 +149,7 @@ class Sakir {
         targets: [this.character],
         x: this.positions[this.positionNumber].x,
         y: this.positions[this.positionNumber].y,
-        duration: 500,
+        duration: 250,
         paused: true,
         ease: 'Sine.easeInOut',
         repeat: 0,
@@ -146,7 +161,7 @@ class Sakir {
         targets: [this.character],
         x: this.positions[this.positionNumber].x,
         y: this.positions[this.positionNumber].y - 50,
-        duration: 500,
+        duration: 250,
         ease: 'Sine.easeInOut',
         repeat: 0,
         onStart: (() => { this.character.anims.play('sakirJumpUpAnim', true) }),
@@ -159,11 +174,36 @@ class Sakir {
 
   jumpDown() {
     if (this.positionNumber > 0) {
+      const exPositionNumber = this.positionNumber;
       this.positionNumber -= 1;
-      this.character.setPosition(this.positions[this.positionNumber].x,
-        this.positions[this.positionNumber].y);
 
       this.character.depth = this.positions[this.positionNumber].charDepth;
+
+      // this.character.setPosition(this.positions[this.positionNumber].x,
+      //   this.positions[this.positionNumber].y);
+
+      this.jumpEndTween = this.scene.tweens.add({
+        targets: [this.character],
+        x: this.positions[this.positionNumber].x,
+        y: this.positions[this.positionNumber].y,
+        duration: 250,
+        paused: true,
+        ease: 'Sine.easeInOut',
+        repeat: 0,
+        onStart: (() => { this.character.anims.play('sakirJumpDownAnim', true) }),
+        onComplete: function () { },
+      });
+
+      this.jumpStartTween = this.scene.tweens.add({
+        targets: [this.character],
+        x: this.positions[this.positionNumber].x,
+        y: this.positions[exPositionNumber].y - 25,
+        duration: 250,
+        ease: 'Sine.easeInOut',
+        repeat: 0,
+        onStart: (() => { this.character.anims.play('sakirJumpUpAnim', true) }),
+        onComplete: (() => { this.jumpEndTween.play(); }),
+      });
     }
 
   }
@@ -175,6 +215,8 @@ class Sakir {
       .setScale(this.bulletScale)
       .setVelocity(this.bulletSpeed, 0)
       .depth = this.positions[this.positionNumber].bulletDepth;
+
+    this.character.anims.play('sakirFireAnim', true);
     this.canFire = false;
     this.scene.time.addEvent({
       delay: this.fireDelay,
