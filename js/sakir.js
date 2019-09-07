@@ -38,20 +38,48 @@ class Sakir {
   preload() {
     const baseURL = './assets/images/sakir/';
     this.scene.load.image('sakir', baseURL + 'sakir.png');
+    this.scene.load.spritesheet('sakirJump', baseURL + 'jump.png',
+      { frameWidth: 177, frameHeight: 250 });
+    this.scene.load.spritesheet('sakirFire' + baseURL + 'fire.png',
+      { frameWidth: 178, frameHeight: 250 });
     this.scene.load.image('bullet', './assets/images/bullets/blueBullet.png');
   }
 
   create() {
     // this.character = this.scene.physics.add.image(cw * .15, ch - ch * 0.04, 'sakir')
-    this.character = this.scene.physics.add.image(
+    this.character = this.scene.physics.add.sprite(
       this.positions[this.positionNumber].x,
-      this.positions[this.positionNumber].y, 'sakir')
+      this.positions[this.positionNumber].y, 'sakirJump', 0)
       .setAlpha(1)
       .setOrigin(0, 1)
       .setImmovable();
     this.character.depth = this.positions[this.positionNumber].charDepth;
     this.scaleFactor = this.ch / this.character.height / 4;
     this.character.setScale(this.scaleFactor);
+
+    this.scene.anims.create({
+      key: 'sakirJumpUpAnim',
+      frames: this.scene.anims.generateFrameNumbers('sakirJump',
+        { start: 0, end: 4 }),
+      frameRate: 10,
+      repeat: 0,
+    });
+
+    this.scene.anims.create({
+      key: 'sakirJumpDownAnim',
+      frames: this.scene.anims.generateFrameNumbers('sakirJump',
+        { start: 5, end: 9 }),
+      frameRate: 10,
+      repeat: 0,
+    });
+
+    this.scene.anims.create({
+      key: 'sakirFireAnim',
+      frames: this.scene.anims.generateFrameNumbers('sakirFire',
+        { start: 0, end: 7 }),
+      frameRate: 10,
+      repeat: 0,
+    })
 
     this.gunY = -this.character.displayHeight / 2.8;
     this.gunX = this.character.displayWidth / 1.5;
@@ -95,10 +123,36 @@ class Sakir {
   jumpUp() {
     if (this.positionNumber < this.positions.length - 1) {
       this.positionNumber += 1;
-      this.character.setPosition(this.positions[this.positionNumber].x,
-        this.positions[this.positionNumber].y);
 
       this.character.depth = this.positions[this.positionNumber].charDepth;
+
+      /* this.character.setPosition(this.positions[this.positionNumber].x,
+        this.positions[this.positionNumber].y); */
+
+
+      this.jumpEndTween = this.scene.tweens.add({
+        targets: [this.character],
+        x: this.positions[this.positionNumber].x,
+        y: this.positions[this.positionNumber].y,
+        duration: 500,
+        paused: true,
+        ease: 'Sine.easeInOut',
+        repeat: 0,
+        onStart: (() => { this.character.anims.play('sakirJumpDownAnim', true) }),
+        onComplete: function () { },
+      });
+
+      this.jumpStartTween = this.scene.tweens.add({
+        targets: [this.character],
+        x: this.positions[this.positionNumber].x,
+        y: this.positions[this.positionNumber].y - 50,
+        duration: 500,
+        ease: 'Sine.easeInOut',
+        repeat: 0,
+        onStart: (() => { this.character.anims.play('sakirJumpUpAnim', true) }),
+        onComplete: (() => { this.jumpEndTween.play(); }),
+      });
+
     }
 
   }
